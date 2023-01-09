@@ -1,6 +1,12 @@
-# Hardhat Project Boilerplate
+# NFT platform script
 
-Starting project with typescript hardhat boilerplate
+Scripts to compile, deploy and test NFT contracts in multiple EVM based blockchain on testnet and mainnet.
+
+## Used technology
+- Typescript
+- Typechain
+- Solidity
+- Hardhat
 
 ## Instruction
 - Compile:
