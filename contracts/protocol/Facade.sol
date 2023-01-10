@@ -190,8 +190,6 @@ contract Facade is IFacade {
                 nftOwners[_tokenId] == _owner,
                 "Facade: Invalid owner address provided!"
         );
-
-        Token memory token = tokenIdToken[_tokenId];
         
         // amount, tokenOwner
 
@@ -213,7 +211,6 @@ contract Facade is IFacade {
     function endAuction(
         uint256 _tokenId
     ) external onlyContractOwnerOrAdmin override isTokenExist(_tokenId) returns (bool) {
-        Token memory token = tokenIdToken[_tokenId];
          /*require(
             nftOwners[_tokenId] == msg.sender || adminAddressExist[msg.sender] == true,
             "Facade: Only Owner or Admin can end Auction!"
