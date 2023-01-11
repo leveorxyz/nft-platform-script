@@ -32,6 +32,11 @@ interface IFacade {
         address newAdminAddress
     );
 
+    event AuctionStart(
+        uint256 tokenId,
+        uint biddingTime
+    );
+
 
     /**
      * @notice This method is used to Mint a new Token
@@ -63,9 +68,8 @@ interface IFacade {
      *
      * @param _tokenId TokenID of the Token to get details of
      *
-     * @return bool value
      */
-    function intializeAuction(uint256 _tokenId, uint _biddingTime) external returns(bool);
+    function intializeAuction(uint256 _tokenId, uint _biddingTime) external;
 
 
     /**
