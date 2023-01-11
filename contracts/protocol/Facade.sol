@@ -85,7 +85,7 @@ contract Facade is IFacade {
             tokenUriOrTitleToTokenId[uri] == 0 && tokenUriOrTitleToTokenId[title] == 0,
             "Facade: Token With same uri or title Exist!"
         );
-
+        
         /*if(adminAddressExist[msg.sender] == false){
             if(msg.sender != _tokenOwner){
                 revert("Facade: Only Admin or One can mint tokens for oneself !");
@@ -102,7 +102,7 @@ contract Facade is IFacade {
         tokenUriOrTitleToTokenId[title] = tokenId;
 
         
-        NFT(nftAddress).safeMint(tokenId, msg.sender, uri);
+        NFT(nftAddress).safeMint(tokenId, _tokenOwner, uri);
 
         nftOwners[tokenId] = _tokenOwner;
         nftCreators[tokenId] = msg.sender;
@@ -159,7 +159,7 @@ contract Facade is IFacade {
         return true;
     }
 
-    function intializeAuction(uint256 _tokenId, uint _biddingTime) external onlyContractOwnerOrAdmin override isTokenExist(_tokenId) returns(bool) {
+    function intializeAuction(uint256 _tokenId, uint _biddingTime) external onlyContractOwnerOrAdmin override isTokenExist(_tokenId) {
 
         /*require(
              nftOwners[_tokenId] == msg.sender || adminAddressExist[msg.sender] == true,
@@ -168,12 +168,9 @@ contract Facade is IFacade {
 
         address nftArtistAddress = nftArtists[_tokenId];
         address nftOwnerAddress = nftOwners[_tokenId];
-        bool isSuccess = IMarketplace(payable(marketAddress)).auctionStart(_tokenId, _biddingTime, nftArtistAddress, nftOwnerAddress);
-        if(isSuccess){
-            return true;
-        }else{
-            return false;
-        }
+        IMarketplace(payable(marketAddress)).auctionStart(_tokenId, _biddingTime, nftArtistAddress, nftOwnerAddress);
+        
+        emit AuctionStart(_tokenId, _biddingTime);
     }
 
     function bidAmount(
