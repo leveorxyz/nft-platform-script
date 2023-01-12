@@ -169,15 +169,14 @@ contract Facade is IFacade {
         address nftArtistAddress = nftArtists[_tokenId];
         address nftOwnerAddress = nftOwners[_tokenId];
         IMarketplace(payable(marketAddress)).auctionStart(_tokenId, _biddingTime, nftArtistAddress, nftOwnerAddress);
-        
-        emit AuctionStart(_tokenId, _biddingTime);
+
     }
 
     function bidAmount(
         uint256 _tokenId,
         address _owner,
         address _bidderAddress
-    ) external onlyContractOwnerOrAdmin payable override isTokenExist(_tokenId) returns (bool) {
+    ) external onlyContractOwnerOrAdmin payable override isTokenExist(_tokenId) {
         require(msg.value != 0, "Facade: You can't bid with 0 amount!");
         require(
             tokenIdToken[_tokenId]._currentOwner != _bidderAddress,
@@ -187,8 +186,6 @@ contract Facade is IFacade {
                 nftOwners[_tokenId] == _owner,
                 "Facade: Invalid owner address provided!"
         );
-        
-        // amount, tokenOwner
 
         bool isSuccess = IMarketplace(payable(marketAddress)).bid(
             _tokenId,
@@ -199,15 +196,12 @@ contract Facade is IFacade {
 
         if(isSuccess){
            payable(marketAddress).transfer(msg.value);
-           return true;
-        } else {
-            return false;
         }
     }
 
     function endAuction(
         uint256 _tokenId
-    ) external onlyContractOwnerOrAdmin override isTokenExist(_tokenId) returns (bool) {
+    ) external onlyContractOwnerOrAdmin override isTokenExist(_tokenId) {
          /*require(
             nftOwners[_tokenId] == msg.sender || adminAddressExist[msg.sender] == true,
             "Facade: Only Owner or Admin can end Auction!"
@@ -216,11 +210,10 @@ contract Facade is IFacade {
             _tokenId
         );
 
-        //_transfer(_tokenId, nftOwners[_tokenId], highestBidder);
+        _transfer(_tokenId, nftOwners[_tokenId], highestBidder);
 
         nftOwners[_tokenId] = highestBidder;
         tokenIdToken[_tokenId]._currentOwner = highestBidder;
-        return true;
     }
 
    
@@ -228,7 +221,6 @@ contract Facade is IFacade {
         external
         override
         onlyContractOwnerOrAdmin
-        returns (bool)
     {
         require(
             adminAddress != address(0),
@@ -240,22 +232,15 @@ contract Facade is IFacade {
 
         emit AdminCreated(adminAddress);
 
-        return true;
     }
 
-    function withDrawOverbidAmount(uint256 _tokenId, address _overBidderAddress) external onlyContractOwnerOrAdmin override isTokenExist(_tokenId) returns (bool){
+    function withDrawOverbidAmount(uint256 _tokenId, address _overBidderAddress) external onlyContractOwnerOrAdmin override isTokenExist(_tokenId) {
 
         require(
             _overBidderAddress != address(0),
             "Facade: Invalid over Bidder Address!"
         );
-        bool isSuccess = IMarketplace(payable(marketAddress)).withdraw(_tokenId, _overBidderAddress);
-
-        if(isSuccess){
-           return true;
-        }else{
-            return false;
-        }
+        IMarketplace(payable(marketAddress)).withdraw(_tokenId, _overBidderAddress);
         
     }
 
@@ -265,13 +250,11 @@ contract Facade is IFacade {
         address _recipient
     ) internal {
         
-            NFT(nftAddress).TransferFrom(
-                _owner,
-                _recipient,
-                _tokenId
-            );
-
-            tokenIdToken[_tokenId]._currentOwner = _recipient;
+        NFT(nftAddress).TransferFrom(
+            _owner,
+            _recipient,
+            _tokenId
+        );
 
         emit Transfer(_tokenId, _owner, _recipient);
     }
