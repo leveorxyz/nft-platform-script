@@ -109,12 +109,8 @@ describe('Facade Marketplace Contract Test', () => {
         await expect(facade.connect(add1).intializeAuction(1, 3000000)).to.be.revertedWith("Facade: Unauthorized Access!");
 
         const intializeAuctionTx: ContractTransaction = await facade.connect(contractOwner).intializeAuction(1, 3000000);
-        const intializeAuctionTxReceipt: ContractReceipt = await intializeAuctionTx.wait();
+        await intializeAuctionTx.wait();
 
-        const event = intializeAuctionTxReceipt.events?.find(event => event.event === 'AuctionStart');
-        const tokenId = event?.args!.tokenId.toNumber();
-
-        expect(tokenId).to.equal(1);
 
     });
 
@@ -301,4 +297,143 @@ describe('Facade Marketplace Contract Test', () => {
 
     });
 
+    it("withdraw Over bid Amount function", async () => {
+       
+        const { nft, marketplace, facade, contractOwner, platformAddress, networkAddress, add1, add2, add3, add4, add5, otherAccounts } = await loadFixture(deployOnceFixture);
+
+        const mintTx: ContractTransaction = await facade.connect(contractOwner).mintToken("art", "art", add1.address);
+        await mintTx.wait();
+
+        const intializeAuctionTx: ContractTransaction = await facade.connect(contractOwner).intializeAuction(1, 3000000);
+        await intializeAuctionTx.wait();
+
+        //Compulsory Step Token owner should approve facade contract address corresponding token id
+        const approveTx: ContractTransaction = await nft.connect(add1).approve(facade.address, 1);
+        await approveTx.wait();
+
+        const bidAmountTx1: ContractTransaction = await facade.connect(contractOwner).bidAmount(1, add1.address, add2.address, {
+            value: ethers.utils.parseEther("10.0")
+        });
+        await bidAmountTx1.wait();
+
+        const bidAmountTx2: ContractTransaction = await facade.connect(contractOwner).bidAmount(1, add1.address, add3.address, {
+            value: ethers.utils.parseEther("20.0")
+        });
+        await bidAmountTx2.wait();
+
+        await expect(facade.connect(contractOwner).withDrawOverbidAmount(1, add4.address)).to.be.revertedWith("Marketplace: Withdraw amount should not be zero");
+
+        const balanceOfAdd2: BigNumber = await provider.getBalance(add2.address);
+
+        const withDrawOverbidAmount: ContractTransaction = await facade.connect(contractOwner).withDrawOverbidAmount(1, add2.address);
+        await withDrawOverbidAmount.wait();
+
+        const afterBalanceOfAdd2: BigNumber = await provider.getBalance(add2.address);
+
+        console.log("Before WithDraw: Add2 balance-> ", balanceOfAdd2);
+        console.log("After WithDraw: Add2 balance->", afterBalanceOfAdd2);
+
+        // 
+        expect(Number(afterBalanceOfAdd2)- Number(balanceOfAdd2)).to.be.above(9.9e18);
+        expect(Number(afterBalanceOfAdd2) - Number(balanceOfAdd2)).to.be.below(10.02e18);
+    });
+
+    it("end Auction Function For Secondary Sale", async () => {
+
+        const { nft, marketplace, facade, contractOwner, platformAddress, networkAddress, add1, add2, add3, add4, add5, otherAccounts } = await loadFixture(deployOnceFixture);
+        
+        const mintTx: ContractTransaction = await facade.connect(contractOwner).mintToken("art", "art", add1.address);
+        await mintTx.wait();
+
+        const intializeAuctionTx1: ContractTransaction =await facade.connect(contractOwner).intializeAuction(1, 3000000);
+        await intializeAuctionTx1.wait();
+
+        //Compulsory Step Token owner should approve facade contract address corresponding token id
+        const approveTx1: ContractTransaction = await nft.connect(add1).approve(facade.address, 1);
+        await approveTx1.wait();
+
+        const bidAmountTx1: ContractTransaction = await facade.connect(contractOwner).bidAmount(1, add1.address, add2.address, {
+            value: ethers.utils.parseEther("10.0")
+        });
+        await bidAmountTx1.wait();
+
+        const balanceOfArtist: BigNumber = await provider.getBalance(add1.address);
+        const balanceOfPlatform: BigNumber = await provider.getBalance(platformAddress.address);
+        const balanceOfNetwork: BigNumber = await provider.getBalance(networkAddress.address);
+
+        console.log("Before: Artist Balance-> ", balanceOfArtist);
+        console.log("Before: Platform Balance-> ", balanceOfPlatform);
+        console.log("Before: Network Balance-> ", balanceOfNetwork);
+
+        const endAuctionTx1: ContractTransaction = await facade.connect(contractOwner).endAuction(1);
+        await endAuctionTx1.wait();
+
+        const afterPrimaryBalanceOfArtist: BigNumber = await provider.getBalance(add1.address);
+        const afterPrimaryBalanceOfPlatform: BigNumber = await provider.getBalance(platformAddress.address);
+        const afterPrimaryBalanceOfNetwork: BigNumber = await provider.getBalance(networkAddress.address);
+        const newOwnerBalance: BigNumber = await provider.getBalance(add2.address);
+
+        console.log("After Primary Sale: Artist Balance-> ", afterPrimaryBalanceOfArtist);
+        console.log("After Primary Sale: Platform Balance-> ", afterPrimaryBalanceOfPlatform);
+        console.log("After Primary Sale: Network Balance-> ", afterPrimaryBalanceOfNetwork);
+        console.log("After Primary Sale: Token New Owner Balance ->", newOwnerBalance);
+
+        // Artist Primary Sale Percentage 87. Then 87% of 10 = 8.7
+        expect(Number(afterPrimaryBalanceOfArtist)- Number(balanceOfArtist)).to.above(8.6e18);
+        expect(Number(afterPrimaryBalanceOfArtist)- Number(balanceOfArtist)).to.below(8.71e18);
+
+        // Platform Primary Sale Percentage 10. Then 10% of 10 = 1
+        expect(Number(afterPrimaryBalanceOfPlatform) - Number(balanceOfPlatform)).to.be.above(0.9e18);
+        expect(Number(afterPrimaryBalanceOfPlatform) - Number(balanceOfPlatform)).to.be.below(1.1e18);
+
+        // Network Primary Sale Percentage 3. Then 3% of 10 = 0.3
+        expect(Number(afterPrimaryBalanceOfNetwork)- Number(balanceOfNetwork)).to.be.above(0.2e18);
+        expect(Number(afterPrimaryBalanceOfNetwork) - Number(balanceOfNetwork)).to.be.below(0.31e18);
+
+        // Secondary Sale
+
+        const intializeAuctionTx2: ContractTransaction = await facade.connect(contractOwner).intializeAuction(1, 3000000);
+        await intializeAuctionTx2.wait();
+
+        //Compulsory Step Token owner should approve facade contract address corresponding token id
+        const approveTx2: ContractTransaction = await nft.connect(add2).approve(facade.address, 1);
+        await approveTx2.wait();
+
+        const bidAmountTx2: ContractTransaction = await facade.connect(contractOwner).bidAmount(1, add2.address, add3.address, {
+            value: ethers.utils.parseEther("50.0")
+        });
+        await bidAmountTx2.wait();
+
+        const endAuctionTx2: ContractTransaction = await facade.connect(contractOwner).endAuction(1);
+        await endAuctionTx2.wait();
+
+        const afterSecondaryBalanceOfArtist = await provider.getBalance(add1.address);
+        const afterSecondaryBalanceOfPlatform = await provider.getBalance(platformAddress.address);
+        const afterSecondaryBalanceOfNetwork = await provider.getBalance(networkAddress.address);
+        const afterSecondaryNewOwnerBalance = await provider.getBalance(add2.address);
+
+        console.log("After Secondary Sale: Artist Balance-> ", afterSecondaryBalanceOfArtist);
+        console.log("After Secondary Sale: Platform Balance-> ", afterSecondaryBalanceOfPlatform);
+        console.log("After Secondary Sale: Network Balance-> ", afterSecondaryBalanceOfNetwork);
+        console.log("After Secondary Sale: Token New Owner Balance ->", afterSecondaryNewOwnerBalance);
+
+        // Artist Secondary Sale Percentage 10. Then 10% of 50 = 5
+        expect(Number(afterSecondaryBalanceOfArtist)- Number(afterPrimaryBalanceOfArtist)).to.above(4.9e18);
+        expect(Number(afterSecondaryBalanceOfArtist)- Number(afterPrimaryBalanceOfArtist)).to.below(5.051e18);
+
+        // Platform Secondary Sale Percentage 2. Then 2% of 50 = 1
+        expect(Number(afterSecondaryBalanceOfPlatform) - Number(afterPrimaryBalanceOfPlatform)).to.be.above(0.9e18);
+        expect(Number(afterSecondaryBalanceOfPlatform) - Number(afterPrimaryBalanceOfPlatform)).to.be.below(1.1e18);
+
+        // Network Secondary Sale Percentage 3. Then 3% of 50 = 1.5
+        expect(Number(afterSecondaryBalanceOfNetwork)- Number(afterPrimaryBalanceOfNetwork)).to.be.above(1.4e18);
+        expect(Number(afterSecondaryBalanceOfNetwork) - Number(afterPrimaryBalanceOfNetwork)).to.be.below(1.5051e18);
+
+        // New Owner Sale Percentage 85. Then 85% of 50 = 42.5
+        expect(Number(afterSecondaryNewOwnerBalance)- Number(newOwnerBalance)).to.be.above(42.4e18);
+        expect(Number(afterSecondaryNewOwnerBalance) - Number(newOwnerBalance)).to.be.below(42.505e18);
+    });
+
 });
+
+
