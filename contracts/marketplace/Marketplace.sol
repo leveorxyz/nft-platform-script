@@ -107,7 +107,7 @@ contract Marketplace is IMarketplace, Ownable, ReentrancyGuard {
 
 
 
-    function auctionStart(uint256 _tokenId, uint _biddingTime, address nftArtistAddress, address nftOwnerAddress) external onlyFacadeCaller override returns(bool) {
+    function auctionStart(uint256 _tokenId, uint _biddingTime, address nftArtistAddress, address nftOwnerAddress) external onlyFacadeCaller override {
 
         require(auctionInfos[_tokenId].started == false, "Marketplace: There is already an ongoing auction for this tokenId!");
 
@@ -116,8 +116,6 @@ contract Marketplace is IMarketplace, Ownable, ReentrancyGuard {
         auctionInfos[_tokenId] = auctionInfo (nftOwnerAddress, biddingEndTime, true);
 
         emit AuctionStarted(_tokenId, nftOwnerAddress, biddingEndTime);
-
-        return true;
 
     }
 
@@ -158,7 +156,7 @@ contract Marketplace is IMarketplace, Ownable, ReentrancyGuard {
     }
 
     /// Withdraw a bid that was overbid.
-    function withdraw(uint256 _tokenId, address withDrawerAddress) external onlyFacadeCaller nonReentrant override returns (bool) {
+    function withdraw(uint256 _tokenId, address withDrawerAddress) external onlyFacadeCaller nonReentrant override {
 
         uint amount = pendingReturns[_tokenId][withDrawerAddress];
 
@@ -172,7 +170,6 @@ contract Marketplace is IMarketplace, Ownable, ReentrancyGuard {
         require(success, "Withdraw amount failed to send");
 
         emit withdrawSucceed(_tokenId, withDrawerAddress, amount);
-        return true;
     }
 
     /// End the auction and send the highest bid
