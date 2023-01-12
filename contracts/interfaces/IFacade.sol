@@ -32,10 +32,6 @@ interface IFacade {
         address newAdminAddress
     );
 
-    event AuctionStart(
-        uint256 tokenId,
-        uint biddingTime
-    );
 
 
     /**
@@ -77,13 +73,12 @@ interface IFacade {
      *
      * @param _tokenId TokenID of the Token to get details of
      *
-     * @return bool value
      */
     function bidAmount(
         uint256 _tokenId,
         address _owner,
         address _bidderAddress
-    ) external payable returns (bool);
+    ) external payable;
 
 
     /**
@@ -91,11 +86,10 @@ interface IFacade {
      *
      * @param _tokenId TokenID of the Token to get details of
      *
-     * @return bool value
      */
     function endAuction(
         uint256 _tokenId
-    ) external returns (bool);
+    ) external;
 
 
     /**
@@ -103,14 +97,12 @@ interface IFacade {
      *
      * @param _tokenId TokenID of the Token to get details of
      *
-     * @return bool value
      */
-    function withDrawOverbidAmount(uint256 _tokenId, address _overBidderAddress) external returns (bool);
+    function withDrawOverbidAmount(uint256 _tokenId, address _overBidderAddress) external;
 
 
     function setAdminAddress(address adminAddress)
-        external
-        returns (bool);
+        external;
 
     function setCollaborators(uint256 _tokenId, address[] memory collaborators, uint256[] calldata percentages) external returns (bool);
 
