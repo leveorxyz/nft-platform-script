@@ -22,6 +22,8 @@ describe('NFT Contract Test', ()=> {
         NFT  = await ethers.getContractFactory("NFT");
         nft = await NFT.deploy();
 
+        await nft.deployed();
+
         return {nft, contractOwner, add1, add2, otherAccounts}
     }
 

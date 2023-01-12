@@ -186,9 +186,6 @@ describe('Facade Marketplace Contract Test', () => {
         const balanceOfPlatform: BigNumber = await provider.getBalance(platformAddress.address);
         const balanceOfNetwork: BigNumber = await provider.getBalance(networkAddress.address);
 
-        console.log("Before: Artist Balance-> ", balanceOfArtist);
-        console.log("Before: Platform Balance-> ", balanceOfPlatform);
-        console.log("Before: Network Balance-> ", balanceOfNetwork);
 
         const endAuctionTx: ContractTransaction = await facade.connect(contractOwner).endAuction(1);
         await endAuctionTx.wait();
@@ -196,10 +193,6 @@ describe('Facade Marketplace Contract Test', () => {
         const afterBalanceOfArtist: BigNumber = await provider.getBalance(add1.address);
         const afterBalanceOfPlatform: BigNumber = await provider.getBalance(platformAddress.address);
         const afterBalanceOfNetwork: BigNumber = await provider.getBalance(networkAddress.address);
-
-        console.log("After: Artist Balance-> ", afterBalanceOfArtist);
-        console.log("After: Platform Balance-> ", afterBalanceOfPlatform);
-        console.log("After: Network Balance-> ", afterBalanceOfNetwork);
 
 
         // Artist Primary Sale Percentage 87. Then 87% of 10 = 8.7
@@ -250,12 +243,6 @@ describe('Facade Marketplace Contract Test', () => {
         const balanceOfcollab1: BigNumber = await provider.getBalance(add4.address);
         const balanceOfcollab2: BigNumber = await provider.getBalance(add5.address);
 
-        console.log("Before: Artist Balance-> ", balanceOfArtist);
-        console.log("Before: Platform Balance-> ", balanceOfPlatform);
-        console.log("Before: Network Balance-> ", balanceOfNetwork);
-        console.log("Before: Collab1 Balance-> ", balanceOfcollab1);
-        console.log("Before: Collab2 Balance-> ", balanceOfcollab2);
-
         const endAuctionTx: ContractTransaction = await facade.connect(contractOwner).endAuction(1);
         await endAuctionTx.wait();
 
@@ -265,12 +252,6 @@ describe('Facade Marketplace Contract Test', () => {
 
         const afterBalanceOfcollab1: BigNumber = await provider.getBalance(add4.address);
         const afterBalanceOfcollab2: BigNumber = await provider.getBalance(add5.address);
-
-        console.log("After: Artist Balance-> ", afterBalanceOfArtist);
-        console.log("After: Platform Balance-> ", afterBalanceOfPlatform);
-        console.log("After: Network Balance-> ", afterBalanceOfNetwork);
-        console.log("After: Collab1 Balance-> ", afterBalanceOfcollab1);
-        console.log("After: Collab2 Balance-> ", afterBalanceOfcollab2);
 
 
         // General Artist Primary Sale Percentage 87. Then 87% of 10 = 8.7. This amount will be distributed among Artist, Collaborator1 and Collaborator2
@@ -330,9 +311,6 @@ describe('Facade Marketplace Contract Test', () => {
 
         const afterBalanceOfAdd2: BigNumber = await provider.getBalance(add2.address);
 
-        console.log("Before WithDraw: Add2 balance-> ", balanceOfAdd2);
-        console.log("After WithDraw: Add2 balance->", afterBalanceOfAdd2);
-
         // 
         expect(Number(afterBalanceOfAdd2)- Number(balanceOfAdd2)).to.be.above(9.9e18);
         expect(Number(afterBalanceOfAdd2) - Number(balanceOfAdd2)).to.be.below(10.02e18);
@@ -361,9 +339,6 @@ describe('Facade Marketplace Contract Test', () => {
         const balanceOfPlatform: BigNumber = await provider.getBalance(platformAddress.address);
         const balanceOfNetwork: BigNumber = await provider.getBalance(networkAddress.address);
 
-        console.log("Before: Artist Balance-> ", balanceOfArtist);
-        console.log("Before: Platform Balance-> ", balanceOfPlatform);
-        console.log("Before: Network Balance-> ", balanceOfNetwork);
 
         const endAuctionTx1: ContractTransaction = await facade.connect(contractOwner).endAuction(1);
         await endAuctionTx1.wait();
@@ -373,10 +348,6 @@ describe('Facade Marketplace Contract Test', () => {
         const afterPrimaryBalanceOfNetwork: BigNumber = await provider.getBalance(networkAddress.address);
         const newOwnerBalance: BigNumber = await provider.getBalance(add2.address);
 
-        console.log("After Primary Sale: Artist Balance-> ", afterPrimaryBalanceOfArtist);
-        console.log("After Primary Sale: Platform Balance-> ", afterPrimaryBalanceOfPlatform);
-        console.log("After Primary Sale: Network Balance-> ", afterPrimaryBalanceOfNetwork);
-        console.log("After Primary Sale: Token New Owner Balance ->", newOwnerBalance);
 
         // Artist Primary Sale Percentage 87. Then 87% of 10 = 8.7
         expect(Number(afterPrimaryBalanceOfArtist)- Number(balanceOfArtist)).to.above(8.6e18);
@@ -411,11 +382,6 @@ describe('Facade Marketplace Contract Test', () => {
         const afterSecondaryBalanceOfPlatform = await provider.getBalance(platformAddress.address);
         const afterSecondaryBalanceOfNetwork = await provider.getBalance(networkAddress.address);
         const afterSecondaryNewOwnerBalance = await provider.getBalance(add2.address);
-
-        console.log("After Secondary Sale: Artist Balance-> ", afterSecondaryBalanceOfArtist);
-        console.log("After Secondary Sale: Platform Balance-> ", afterSecondaryBalanceOfPlatform);
-        console.log("After Secondary Sale: Network Balance-> ", afterSecondaryBalanceOfNetwork);
-        console.log("After Secondary Sale: Token New Owner Balance ->", afterSecondaryNewOwnerBalance);
 
         // Artist Secondary Sale Percentage 10. Then 10% of 50 = 5
         expect(Number(afterSecondaryBalanceOfArtist)- Number(afterPrimaryBalanceOfArtist)).to.above(4.9e18);
