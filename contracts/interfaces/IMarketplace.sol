@@ -35,9 +35,8 @@ interface IMarketplace {
      *
      * @param _tokenId TokenID of the Token to get details of
      *
-     * @return bool value
      */
-    function auctionStart(uint256 _tokenId, uint _biddingTime, address nftArtistAddress, address nftOwnerAddress) external returns (bool);
+    function auctionStart(uint256 _tokenId, uint _biddingTime, address nftArtistAddress, address nftOwnerAddress) external;
 
     /**
      * @notice This method is used bid of any auction
@@ -54,9 +53,8 @@ interface IMarketplace {
      *
      * @param _tokenId TokenID of the Token to get details of
      *
-     * @return bool value
      */
-    function withdraw(uint256 _tokenId, address withDrawerAddress) external returns (bool);
+    function withdraw(uint256 _tokenId, address withDrawerAddress) external;
 
 
     /**
