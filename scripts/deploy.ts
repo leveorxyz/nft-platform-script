@@ -91,7 +91,7 @@ async function main() {
     case "fuji":
       explorerLink = "https://testnet.avascan.info/blockchain/c/address/";
       break;
-    case "goerli":
+    case "avalanche":
       explorerLink = "https://avascan.info/blockchain/wraptag/address/";
       break;
   }
