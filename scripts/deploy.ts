@@ -4,15 +4,15 @@ import { writeFile } from 'fs/promises';
 async function main() {
   // const lockedAmount = ethers.utils.parseEther("1");
 
-  const Greeter = await ethers.getContractFactory("Greeter");
+  const NFT = await ethers.getContractFactory("NFT");
   // const greeting = await Greeting.deploy("Hello world", { value: lockedAmount });
-  const greeter = await Greeter.deploy("Hello, world!");
+  const nft = await NFT.deploy();
 
-  await greeter.deployed();
+  await nft.deployed();
 
-  console.log("Greeting contract deployed to: ", greeter.address);
+  console.log("Greeting contract deployed to: ", nft.address);
   // write
-  await writeFile('./data.json', JSON.stringify({contractAddress: greeter.address}));
+  await writeFile('./data.json', JSON.stringify({nftAddress: nft.address}));
 }
 
 // We recommend this pattern to be able to use async/await everywhere
