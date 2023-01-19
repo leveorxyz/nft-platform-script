@@ -43,7 +43,7 @@
     "deploy:goerli": "npx hardhat run --network goerli scripts/deploy.ts",
     "deploy:kovan": "npx hardhat run --network kovan scripts/deploy.ts",
     "deploy:ethmainnet": "npx hardhat run --network mainnet scripts/deploy.ts",
-    "deploy:bsctest": "npx hardhat run --network kovan scripts/deploy.ts",
+    "deploy:bsctest": "npx hardhat run --network bsctest scripts/deploy.ts",
     "deploy:bscmain": "npx hardhat run --network bscmain scripts/deploy.ts",
     "deploy:mumbai": "npx hardhat run --network mumbai scripts/deploy.ts",
     "deploy:polygon": "npx hardhat run --network polygon scripts/deploy.ts",

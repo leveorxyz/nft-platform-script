@@ -67,7 +67,34 @@ async function main() {
   const marketplaceConfigureFacadeTx: ContractTransaction =
     await marketplace.configureFacadeCaller(facadeAddress);
   await marketplaceConfigureFacadeTx.wait();
-  let explorerLink = "https://goerli.etherscan.io/address";
+  let explorerLink: string = "";
+
+  switch (process.env.HARDHAT_NETWORK) {
+    case "goerli":
+      explorerLink = "https://goerli.etherscan.io/address";
+      break;
+    case "mainnet":
+      explorerLink = "https://etherscan.io/address";
+      break;
+    case "bsctest":
+      explorerLink = "https://testnet.bscscan.com/address";
+      break;
+    case "bscmain":
+      explorerLink = "https://bscscan.com/address";
+      break;
+    case "mumbai":
+      explorerLink = "https://mumbai.polygonscan.com/address";
+      break;
+    case "polygon":
+      explorerLink = "https://polygonscan.com/address";
+      break;
+    case "fuji":
+      explorerLink = "https://testnet.avascan.info/blockchain/c/address";
+      break;
+    case "goerli":
+      explorerLink = "https://avascan.info/blockchain/wraptag/address";
+      break;
+  }
   let nftContractLink = explorerLink + nftAddress,
     marketplaceAddressLink = explorerLink + marketPlaceAddress,
     facadeContractLink = explorerLink + facadeAddress;
@@ -81,7 +108,7 @@ async function main() {
       marketplaceAddress: marketPlaceAddress,
       marketplaceAddressLink: marketplaceAddressLink,
       facadeAddress: facadeAddress,
-      facadeContractLink: facadeContractLink
+      facadeContractLink: facadeContractLink,
     })
   );
 }
