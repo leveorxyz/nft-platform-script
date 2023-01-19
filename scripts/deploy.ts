@@ -71,28 +71,28 @@ async function main() {
 
   switch (process.env.HARDHAT_NETWORK) {
     case "goerli":
-      explorerLink = "https://goerli.etherscan.io/address";
+      explorerLink = "https://goerli.etherscan.io/address/";
       break;
     case "mainnet":
-      explorerLink = "https://etherscan.io/address";
+      explorerLink = "https://etherscan.io/address/";
       break;
     case "bsctest":
-      explorerLink = "https://testnet.bscscan.com/address";
+      explorerLink = "https://testnet.bscscan.com/address/";
       break;
     case "bscmain":
-      explorerLink = "https://bscscan.com/address";
+      explorerLink = "https://bscscan.com/address/";
       break;
     case "mumbai":
-      explorerLink = "https://mumbai.polygonscan.com/address";
+      explorerLink = "https://mumbai.polygonscan.com/address/";
       break;
     case "polygon":
-      explorerLink = "https://polygonscan.com/address";
+      explorerLink = "https://polygonscan.com/address/";
       break;
     case "fuji":
-      explorerLink = "https://testnet.avascan.info/blockchain/c/address";
+      explorerLink = "https://testnet.avascan.info/blockchain/c/address/";
       break;
     case "goerli":
-      explorerLink = "https://avascan.info/blockchain/wraptag/address";
+      explorerLink = "https://avascan.info/blockchain/wraptag/address/";
       break;
   }
   let nftContractLink = explorerLink + nftAddress,
