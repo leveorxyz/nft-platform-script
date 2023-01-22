@@ -1,0 +1,8 @@
+{
+    "nftAddress": "0xc4ccE1DE78b6754D38eDa6A429970cc7733dEC3a",
+    "nftContractLink": "https://goerli.etherscan.io/address0xc4ccE1DE78b6754D38eDa6A429970cc7733dEC3a",
+    "marketplaceAddress": "0x841Ec7fc7e5917B880535E12582498C954Ea8f1d",
+    "marketplaceAddressLink": "https://goerli.etherscan.io/address0x841Ec7fc7e5917B880535E12582498C954Ea8f1d",
+    "facadeAddress": "0x53D4d809835091F9C59B250A741d24d85B06Ffbb",
+    "facadeContractLink": "https://goerli.etherscan.io/address0x53D4d809835091F9C59B250A741d24d85B06Ffbb"
+}
