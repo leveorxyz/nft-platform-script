@@ -21,7 +21,9 @@ const chainIds = {
   mumbai: 80001,
   polygon: 137,
   fuji: 43113,
-  avalanche: 43114
+  avalanche: 43114,
+  alfajores: 44787,
+  celo: 42220
 };
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
@@ -29,7 +31,7 @@ const API_KEY  = process.env.RPC_NODE_API_KEY;
 const MNEMONIC  = process.env.MNEMONIC;
 const ETHERSCAN_API_KEY  = process.env.ETHERSCAN_API_KEY as string;
 
-const defaultRPCNodeProvider = process.env.RPC_PROVIDER;
+const defaultRPCNodeProvider = process.env.RPC_PROVIDER as string;
 
 const getRPCURL = (network: string, RPCNodeProvider: string) => {
   switch (RPCNodeProvider) {
@@ -50,6 +52,8 @@ const getRPCURL = (network: string, RPCNodeProvider: string) => {
   }
   return;
 };
+
+
 
 const config: HardhatUserConfig = {
   defaultNetwork: 'hardhat',
@@ -118,6 +122,18 @@ const config: HardhatUserConfig = {
     avalanche: {
       url: 'https://api.avax.network/ext/bc/C/rpc',
       chainId: chainIds.avalanche,
+      gasPrice: 20000000000,
+      accounts: [`0x${PRIVATE_KEY}`],
+    },
+    alfajores: {
+      url: 'https://alfajores-forno.celo-testnet.org',
+      chainId: chainIds.alfajores,
+      gasPrice: 20000000,
+      accounts: [`0x${PRIVATE_KEY}`],
+    },
+    celo: {
+      url: 'https://forno.celo.org',
+      chainId: chainIds.celo,
       gasPrice: 20000000000,
       accounts: [`0x${PRIVATE_KEY}`],
     },

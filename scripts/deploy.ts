@@ -53,7 +53,7 @@ async function main() {
   const marketPlaceAddress = marketplace.address;
 
   // Deploy Facade Contract
-  Facade = await ethers.getContractFactory("Facade");
+  Facade = await ethers.getContractFactory("Facade", {value: ethers.utils.parseEther("1")});
   facade = await Facade.deploy(nftAddress, marketPlaceAddress);
 
   await facade.deployed();
