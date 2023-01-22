@@ -29,7 +29,7 @@ const API_KEY  = process.env.RPC_NODE_API_KEY;
 const MNEMONIC  = process.env.MNEMONIC;
 const ETHERSCAN_API_KEY  = process.env.ETHERSCAN_API_KEY as string;
 
-const defaultRPCNodeProvider = "infura";
+const defaultRPCNodeProvider = process.env.RPC_PROVIDER;
 
 const getRPCURL = (network: string, RPCNodeProvider: string) => {
   switch (RPCNodeProvider) {
