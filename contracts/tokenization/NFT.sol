@@ -34,11 +34,11 @@ contract NFT is ERC721, ERC721URIStorage, Pausable, Ownable {
         
         require(
             _facadeContractAddress != address(0),
-            "NFT Cart: Invalid Facade Contract Address!"
+            "NFT: Invalid Facade Contract Address!"
         );
         require(
             _facadeContract == address(0),
-            "NFT Cart: Facade Contract Caller Already Configured!"
+            "NFT: Facade Contract Caller Already Configured!"
         );
 
         _facadeContract = _facadeContractAddress;
