@@ -37,7 +37,7 @@ contract Marketplace is IMarketplace, Ownable, ReentrancyGuard {
         );
         require(
             _facadeContract == address(0),
-            "Marketplace: Facade Contract Caller Alredy Configured!"
+            "Marketplace: Facade Contract Caller Already Configured!"
         );
 
         _facadeContract = _facadeContractAddress;
