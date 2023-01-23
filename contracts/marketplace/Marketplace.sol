@@ -214,8 +214,8 @@ contract Marketplace is IMarketplace, Ownable, ReentrancyGuard {
             
            // Share money to Platform Address
             
-            (bool successNandi, ) = address(platformAddress).call{ value: totalAmount.mul(platformPrimaryPercentage).div(100) }("");
-            require(successNandi, "Marketplace: Platform Percentage failed to send");
+            (bool successNFTCart, ) = address(platformAddress).call{ value: totalAmount.mul(platformPrimaryPercentage).div(100) }("");
+            require(successNFTCart, "Marketplace: Platform Percentage failed to send");
 
             // Share money to Network Address
 
@@ -260,8 +260,8 @@ contract Marketplace is IMarketplace, Ownable, ReentrancyGuard {
         uint256 tokenOwnerShare = totalPercentage.sub(otherShare);
 
         // Share money to Platform Address
-        (bool successNandi, ) = address(platformAddress).call{ value: totalAmount.mul(platformSecondaryPercentage).div(100) }("");
-        require(successNandi, "Marketplace: Platform Percentage failed to send");
+        (bool successNFTCart, ) = address(platformAddress).call{ value: totalAmount.mul(platformSecondaryPercentage).div(100) }("");
+        require(successNFTCart, "Marketplace: Platform Percentage failed to send");
 
         // Share money to Network Address
         (bool successNetwork, ) = address(networkAddress).call{ value: totalAmount.mul(networkSecondaryPercentage).div(100) }("");
