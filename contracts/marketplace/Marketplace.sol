@@ -43,7 +43,6 @@ contract Marketplace is IMarketplace, Ownable, ReentrancyGuard {
         _facadeContract = _facadeContractAddress;
     }
 
-    using SafeMath for uint256;
 
     // Market Primary and Secondary Sale address and Percentage
     address platformAddress;
@@ -214,18 +213,18 @@ contract Marketplace is IMarketplace, Ownable, ReentrancyGuard {
             
            // Share money to Platform Address
             
-            (bool successNFTCart, ) = address(platformAddress).call{ value: totalAmount.mul(platformPrimaryPercentage).div(100) }("");
+            (bool successNFTCart, ) = address(platformAddress).call{ value: (totalAmount*(platformPrimaryPercentage))/100}("");
             require(successNFTCart, "Marketplace: Platform Percentage failed to send");
 
             // Share money to Network Address
 
-            (bool successNetwork, ) = address(networkAddress).call{ value: totalAmount.mul(networkPrimaryPercentage).div(100) }("");
+            (bool successNetwork, ) = address(networkAddress).call{ value: (totalAmount*(networkPrimaryPercentage))/100}("");
             require(successNetwork, "Marketplace: Network Percentage failed to send");
 
             // Share money to Artist or Nft Creator
 
             if(tokenCollaborators[_tokenId]._collaborators.length > 0 ) {
-                uint256 artistAmount = totalAmount.mul(nftCreatorPrimaryPercentage).div(100);
+                uint256 artistAmount = (totalAmount*(nftCreatorPrimaryPercentage))/100;
 
                 Collaborators memory tokenColab = tokenCollaborators[_tokenId];
 
@@ -238,43 +237,43 @@ contract Marketplace is IMarketplace, Ownable, ReentrancyGuard {
                 ) {
                     collaboratorsTotalPercentage += tokenColab._percentages[index];
                     
-                    (bool successCollab, ) = address(tokenColab._collaborators[index]).call{ value: artistAmount.mul(tokenColab._percentages[index]).div(100) }("");
+                    (bool successCollab, ) = address(tokenColab._collaborators[index]).call{ value: (artistAmount * (tokenColab._percentages[index]))/100}("");
                     require(successCollab, "Marketplace: Collaborators Percentage failed to send");
 
                 }
 
                 uint256 artistPercent = 100 - collaboratorsTotalPercentage;
 
-                (bool successArtist, ) = address(nftArtistAddresses[_tokenId]).call{ value: artistAmount.mul(artistPercent).div(100) }("");
+                (bool successArtist, ) = address(nftArtistAddresses[_tokenId]).call{ value: (artistAmount*(artistPercent))/100}("");
                 require(successArtist, "Marketplace: Artist Percentage failed to send");
 
             } else{
-                (bool successArtist, ) = address(nftArtistAddresses[_tokenId]).call{ value: totalAmount.mul(nftCreatorPrimaryPercentage).div(100) }("");
+                (bool successArtist, ) = address(nftArtistAddresses[_tokenId]).call{ value: (totalAmount*(nftCreatorPrimaryPercentage))/100}("");
                 require(successArtist, "Marketplace: Artist Percentage failed to send");
             }
 
         } else{
              
         uint256 totalPercentage = 100;
-        uint256 otherShare = nftCreatorSecondaryPercentage.add(platformSecondaryPercentage).add(networkSecondaryPercentage);
-        uint256 tokenOwnerShare = totalPercentage.sub(otherShare);
+        uint256 otherShare = nftCreatorSecondaryPercentage+platformSecondaryPercentage+networkSecondaryPercentage;
+        uint256 tokenOwnerShare = totalPercentage-otherShare;
 
         // Share money to Platform Address
-        (bool successNFTCart, ) = address(platformAddress).call{ value: totalAmount.mul(platformSecondaryPercentage).div(100) }("");
+        (bool successNFTCart, ) = address(platformAddress).call{ value: (totalAmount*(platformSecondaryPercentage))/100}("");
         require(successNFTCart, "Marketplace: Platform Percentage failed to send");
 
         // Share money to Network Address
-        (bool successNetwork, ) = address(networkAddress).call{ value: totalAmount.mul(networkSecondaryPercentage).div(100) }("");
+        (bool successNetwork, ) = address(networkAddress).call{ value: (totalAmount*(networkSecondaryPercentage))/100}("");
         require(successNetwork, "Marketplace: Network Percentage failed to send");
 
         // Share money to Artist or Nft Creator
 
-        (bool successArtist, ) = address(nftArtistAddresses[_tokenId]).call{ value: totalAmount.mul(nftCreatorSecondaryPercentage).div(100) }("");
+        (bool successArtist, ) = address(nftArtistAddresses[_tokenId]).call{ value: (totalAmount*(nftCreatorSecondaryPercentage))/100}("");
         require(successArtist, "Marketplace: Artist Percentage failed to send");
 
         // Share money to Nft owner or who created the auction
 
-        (bool successOwner, ) = address(auctionInfos[_tokenId]._creator).call{ value: totalAmount.mul(tokenOwnerShare).div(100) }("");
+        (bool successOwner, ) = address(auctionInfos[_tokenId]._creator).call{ value: (totalAmount*(tokenOwnerShare))/100}("");
         require(successOwner, "Marketplace: Owner Percentage failed to send");
       }
     }
