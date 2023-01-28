@@ -119,7 +119,7 @@ contract Marketplace is IMarketplace, Ownable, ReentrancyGuard {
     }
 
     
-    function bid(uint256 _tokenId, address bidder, uint256 auctionAmount, address _tokenOwner) external onlyFacadeCaller override returns(bool) {
+    function bid(uint256 _tokenId, address bidder, uint256 auctionAmount, address _tokenOwner) external payable onlyFacadeCaller override returns(bool) {
 
         // Revert the call if the bidding
         // period is over.
