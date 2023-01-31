@@ -45,7 +45,7 @@ interface IMarketplace {
      *
      * @return bool value
      */
-    function bid(uint256 _tokenId, address bidder, uint256 auctionAmount, address _tokenOwner) external returns(bool);
+    function bid(uint256 _tokenId, address bidder, uint256 auctionAmount, address _tokenOwner) external payable returns(bool);
 
 
     /**

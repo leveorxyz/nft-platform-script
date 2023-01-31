@@ -53,7 +53,9 @@ async function main() {
   const marketPlaceAddress = marketplace.address;
 
   // Deploy Facade Contract
-  Facade = await ethers.getContractFactory("Facade");
+  Facade = await ethers.getContractFactory("Facade", {
+    value: ethers.utils.parseEther("1"),
+  });
   facade = await Facade.deploy(nftAddress, marketPlaceAddress);
 
   await facade.deployed();
@@ -93,6 +95,12 @@ async function main() {
       break;
     case "avalanche":
       explorerLink = "https://avascan.info/blockchain/wraptag/address/";
+      break;
+    case "alfajores":
+      explorerLink = "https://explorer.celo.org/alfajores/address/";
+      break;
+    case "celo":
+      explorerLink = "https://explorer.celo.org/mainnet/address/";
       break;
   }
   let nftContractLink = explorerLink + nftAddress,
