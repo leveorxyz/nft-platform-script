@@ -4,6 +4,8 @@ import "@nomiclabs/hardhat-solhint";
 import '@typechain/hardhat'
 import '@nomiclabs/hardhat-ethers';
 import '@nomiclabs/hardhat-waffle';
+import 'hardhat-gas-reporter';
+
 const dotenv = require('dotenv');
 const path = require('path');
 
